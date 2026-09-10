@@ -1,0 +1,104 @@
+"""
+Number Guessing Game (Binary Search Based)
+--------------------------------------------
+AKUEB 11th/12th Grade Computer Science - Python Structures Used:
+- Variables and Data Types
+- if / elif / else (Selection Structures)
+- while loop (Repetition Structure)
+- Functions (User-Defined)
+- random module
+- Input/Output statements
+- Boolean expressions
+
+Concept:
+The computer selects a random number between 1 and 100.
+The user tries to guess it. After each guess, the computer
+gives a hint: "Too High" or "Too Low", similar to how binary
+search narrows down a range by eliminating half the values
+each time.
+"""
+
+import random
+
+
+def select_level():
+    """Function to let the user choose difficulty level."""
+    print("Select Difficulty Level:")
+    print("1. Easy   (10 attempts)")
+    print("2. Hard   (5 attempts)")
+
+    choice = input("Enter your choice (1 or 2): ")
+
+    if choice == "1":
+        return 10
+    elif choice == "2":
+        return 5
+    else:
+        print("Invalid choice! Defaulting to Easy level.")
+        return 10
+
+
+def play_game():
+    """Main function that runs the guessing game."""
+    lower_bound = 1
+    upper_bound = 100
+
+    # Computer randomly selects the number
+    computer_number = random.randint(lower_bound, upper_bound)
+
+    attempts_allowed = select_level()
+    attempts_used = 0
+    guessed_correctly = False
+
+    print(f"\nI have selected a number between {lower_bound} and {upper_bound}.")
+    print(f"You have {attempts_allowed} attempts to guess it.")
+    print("Use my hints (Too High / Too Low) like a binary search!\n")
+
+    while attempts_used < attempts_allowed:
+        try:
+            user_guess = int(input("Enter your guess: "))
+        except ValueError:
+            print("Please enter a valid whole number.\n")
+            continue
+
+        if user_guess < lower_bound or user_guess > upper_bound:
+            print(f"Enter a number within the range {lower_bound}-{upper_bound}.\n")
+            continue
+
+        attempts_used += 1
+
+        if user_guess == computer_number:
+            guessed_correctly = True
+            break
+        elif user_guess < computer_number:
+            print("Hint: Number is Higher than your guess.")
+        else:
+            print("Hint: Number is Lower than your guess.")
+
+        remaining = attempts_allowed - attempts_used
+        print(f"Attempts left: {remaining}\n")
+
+    # Result Display
+    if guessed_correctly:
+        print(f"\nCongratulations! You guessed the number {computer_number} "
+              f"correctly in {attempts_used} attempt(s).")
+    else:
+        print(f"\nGame Over! You used all {attempts_allowed} attempts.")
+        print(f"The correct number was: {computer_number}")
+
+
+def main():
+    """Program entry point with replay option."""
+    print("=== NUMBER GUESSING GAME (Binary Search Style) ===\n")
+
+    play_again = "yes"
+    while play_again.lower() == "yes":
+        play_game()
+        play_again = input("\nDo you want to play again? (yes/no): ")
+
+    print("\nThank you for playing!")
+
+
+# Program starts here
+if __name__ == "__main__":
+    main()
